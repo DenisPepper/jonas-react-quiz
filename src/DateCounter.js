@@ -1,25 +1,37 @@
-import { useState } from "react";
+import { useReducer, useState } from 'react';
+
+const Actions = {
+  decrement: { type: 'dec' },
+  inccrement: { type: 'inc' },
+  setCount: { type: 'set', payload: 0 },
+};
+
+function reducer(state, action) {
+  console.log(state, action);
+  if (action.type === Actions.decrement.type) return --state;
+  if (action.type === Actions.inccrement.type) return ++state;
+  if (action.type === Actions.setCount.type) return action.payload;
+  return state;
+}
 
 function DateCounter() {
-  const [count, setCount] = useState(0);
   const [step, setStep] = useState(1);
+  const [count, dispatch] = useReducer(reducer, 0);
 
   // This mutates the date object.
-  const date = new Date("june 21 2027");
+  const date = new Date('june 21 2027');
   date.setDate(date.getDate() + count);
 
   const dec = function () {
-    // setCount((count) => count - 1);
-    setCount((count) => count - step);
+    dispatch(Actions.decrement);
   };
 
   const inc = function () {
-    // setCount((count) => count + 1);
-    setCount((count) => count + step);
+    dispatch(Actions.inccrement);
   };
 
   const defineCount = function (e) {
-    setCount(Number(e.target.value));
+    dispatch({ ...Actions.setCount, payload: Number(e.target.value) });
   };
 
   const defineStep = function (e) {
@@ -27,17 +39,18 @@ function DateCounter() {
   };
 
   const reset = function () {
-    setCount(0);
+    dispatch(Actions.setCount);
+    // setCount(0);
     setStep(1);
   };
 
   return (
-    <div className="counter">
+    <div className='counter'>
       <div>
         <input
-          type="range"
-          min="0"
-          max="10"
+          type='range'
+          min='0'
+          max='10'
           value={step}
           onChange={defineStep}
         />
