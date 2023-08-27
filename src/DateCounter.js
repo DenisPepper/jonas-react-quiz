@@ -6,13 +6,18 @@ const counterActions = {
   setCount: { type: 'set', payload: 0 },
 };
 
-function reducer(state, action) {
-  console.log(state, action);
-  if (action.type === counterActions.decrement.type) return --state;
-  if (action.type === counterActions.inccrement.type) return ++state;
-  if (action.type === counterActions.setCount.type) return action.payload;
-  return state;
-}
+const reducer = (state, action) => {
+  switch (action.type) {
+    case counterActions.decrement.type:
+      return --state;
+    case counterActions.inccrement.type:
+      return ++state;
+    case counterActions.setCount.type:
+      return action.payload;
+    default:
+      throw new Error('unknown action');
+  }
+};
 
 function DateCounter() {
   const [step, setStep] = useState(1);
