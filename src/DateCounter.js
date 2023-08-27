@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 
-const Actions = {
+const counterActions = {
   decrement: { type: 'dec' },
   inccrement: { type: 'inc' },
   setCount: { type: 'set', payload: 0 },
@@ -8,9 +8,9 @@ const Actions = {
 
 function reducer(state, action) {
   console.log(state, action);
-  if (action.type === Actions.decrement.type) return --state;
-  if (action.type === Actions.inccrement.type) return ++state;
-  if (action.type === Actions.setCount.type) return action.payload;
+  if (action.type === counterActions.decrement.type) return --state;
+  if (action.type === counterActions.inccrement.type) return ++state;
+  if (action.type === counterActions.setCount.type) return action.payload;
   return state;
 }
 
@@ -23,15 +23,15 @@ function DateCounter() {
   date.setDate(date.getDate() + count);
 
   const dec = function () {
-    dispatch(Actions.decrement);
+    dispatch(counterActions.decrement);
   };
 
   const inc = function () {
-    dispatch(Actions.inccrement);
+    dispatch(counterActions.inccrement);
   };
 
   const defineCount = function (e) {
-    dispatch({ ...Actions.setCount, payload: Number(e.target.value) });
+    dispatch({ ...counterActions.setCount, payload: Number(e.target.value) });
   };
 
   const defineStep = function (e) {
@@ -39,7 +39,7 @@ function DateCounter() {
   };
 
   const reset = function () {
-    dispatch(Actions.setCount);
+    dispatch(counterActions.setCount);
     // setCount(0);
     setStep(1);
   };
