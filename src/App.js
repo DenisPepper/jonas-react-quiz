@@ -19,9 +19,13 @@ const initialState = { questions: [], status: Status.loading };
 const reducer = (state, action) => {
   switch (action.type) {
     case Action.dataRecived:
-      return { ...state, questions: action.payload };
+      return {
+        ...state,
+        questions: action.payload.questions,
+        status: action.payload.status,
+      };
     default:
-      return state;
+      throw new Error('Unknown action');
   }
 };
 
@@ -31,7 +35,12 @@ export default function App() {
   useEffect(() => {
     fetch('http://localhost:8000/questions')
       .then((response) => response.json())
-      .then((data) => dispatch({ type: Action.dataRecived, payload: data }))
+      .then((data) =>
+        dispatch({
+          type: Action.dataRecived,
+          payload: { questions: data, status: Status.ready },
+        })
+      )
       .catch((err) => console.error(err));
   }, []);
 
