@@ -12,9 +12,10 @@ const Status = {
 
 const Action = {
   dataRecived: 'dataRecived',
+  dataFaild: 'dataFailed',
 };
 
-const initialState = { questions: [], status: Status.loading };
+const initialState = { questions: [], status: Status.loading, error: '' };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -23,6 +24,12 @@ const reducer = (state, action) => {
         ...state,
         questions: action.payload.questions,
         status: action.payload.status,
+      };
+    case Action.dataFaild:
+      return {
+        ...state,
+        status: action.payload.status,
+        error: action.payload.error,
       };
     default:
       throw new Error('Unknown action');
@@ -38,10 +45,15 @@ export default function App() {
       .then((data) =>
         dispatch({
           type: Action.dataRecived,
-          payload: { questions: data, status: Status.ready },
+          payload: { questions: data, status: Status.ready, error: '' },
         })
       )
-      .catch((err) => console.error(err));
+      .catch((err) =>
+        dispatch({
+          type: Action.dataFaild,
+          payload: { questions: [], status: Status.error, error: err },
+        })
+      );
   }, []);
 
   return (
