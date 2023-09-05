@@ -20,7 +20,7 @@ const Action = {
   startQuiz: 'startQuiz',
 };
 
-const initialState = { questions: [], status: Status.loading };
+const initialState = { questions: [], index: 0, status: Status.loading };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -46,7 +46,10 @@ const reducer = (state, action) => {
 };
 
 export default function App() {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, index, status }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
 
   useEffect(() => {
     fetch('http://localhost:8000/questions')
@@ -84,7 +87,7 @@ export default function App() {
             startHandler={handleStartClick}
           />
         )}
-        {status === Status.active && <Question />}
+        {status === Status.active && <Question item={questions[index]} />}
       </Main>
     </div>
   );

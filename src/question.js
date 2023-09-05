@@ -1,3 +1,3 @@
-export const Question = () => {
-  return <div> question</div>;
+export const Question = ({ item }) => {
+  return <div>{item.question}</div>;
 };
