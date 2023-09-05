@@ -4,6 +4,7 @@ import { Main } from './Main';
 import { Loader } from './Loader';
 import { Error } from './Error';
 import { StartScreen } from './start-screen';
+import { Question } from './question';
 
 const Status = {
   loading: 'loading',
@@ -16,6 +17,7 @@ const Status = {
 const Action = {
   dataRecived: 'dataRecived',
   dataFaild: 'dataFailed',
+  startQuiz: 'startQuiz',
 };
 
 const initialState = { questions: [], status: Status.loading };
@@ -32,6 +34,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         status: action.payload.status,
+      };
+    case Action.startQuiz:
+      return {
+        ...state,
+        status: action.payload,
       };
     default:
       throw new Error('Unknown action');
@@ -61,13 +68,23 @@ export default function App() {
       );
   }, []);
 
+  const handleStartClick = () => {
+    dispatch({ type: Action.startQuiz, payload: Status.active });
+  };
+
   return (
     <div className='app'>
       <Header />
       <Main>
         {status === Status.loading && <Loader />}
         {status === Status.error && <Error />}
-        {status === Status.ready && <StartScreen amount={questions.length} />}
+        {status === Status.ready && (
+          <StartScreen
+            amount={questions.length}
+            startHandler={handleStartClick}
+          />
+        )}
+        {status === Status.active && <Question />}
       </Main>
     </div>
   );
