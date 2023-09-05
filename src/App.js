@@ -1,6 +1,9 @@
 import { useEffect, useReducer } from 'react';
-import Header from './Header';
+import { Header } from './Header';
 import { Main } from './Main';
+import { Loader } from './Loader';
+import { Error } from './Error';
+import { StartScreen } from './start-screen';
 
 const Status = {
   loading: 'loading',
@@ -15,7 +18,7 @@ const Action = {
   dataFaild: 'dataFailed',
 };
 
-const initialState = { questions: [], status: Status.loading, error: '' };
+const initialState = { questions: [], status: Status.loading };
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -29,7 +32,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         status: action.payload.status,
-        error: action.payload.error,
       };
     default:
       throw new Error('Unknown action');
@@ -37,21 +39,24 @@ const reducer = (state, action) => {
 };
 
 export default function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ question, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetch('http://localhost:8000/questions')
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw new Error('Server response are not ok');
+      })
       .then((data) =>
         dispatch({
           type: Action.dataRecived,
-          payload: { questions: data, status: Status.ready, error: '' },
+          payload: { questions: data, status: Status.ready },
         })
       )
       .catch((err) =>
         dispatch({
           type: Action.dataFaild,
-          payload: { questions: [], status: Status.error, error: err },
+          payload: { questions: [], status: Status.error },
         })
       );
   }, []);
@@ -60,8 +65,9 @@ export default function App() {
     <div className='app'>
       <Header />
       <Main>
-        <p>1/15</p>
-        <p>Question?</p>
+        {status === Status.loading && <Loader />}
+        {status === Status.error && <Error />}
+        {status === Status.ready && <StartScreen />}
       </Main>
     </div>
   );
