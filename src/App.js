@@ -39,7 +39,7 @@ const reducer = (state, action) => {
 };
 
 export default function App() {
-  const [{ question, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     fetch('http://localhost:8000/questions')
@@ -67,7 +67,7 @@ export default function App() {
       <Main>
         {status === Status.loading && <Loader />}
         {status === Status.error && <Error />}
-        {status === Status.ready && <StartScreen />}
+        {status === Status.ready && <StartScreen amount={questions.length} />}
       </Main>
     </div>
   );
