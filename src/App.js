@@ -18,9 +18,15 @@ const Action = {
   dataRecived: 'dataRecived',
   dataFaild: 'dataFailed',
   startQuiz: 'startQuiz',
+  newAnswer: 'newAnswer',
 };
 
-const initialState = { questions: [], index: 0, status: Status.loading };
+const initialState = {
+  questions: [],
+  index: 0,
+  answer: null,
+  status: Status.loading,
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -40,13 +46,18 @@ const reducer = (state, action) => {
         ...state,
         status: action.payload,
       };
+    case Action.newAnswer:
+      return {
+        ...state,
+        answer: action.payload,
+      };
     default:
       throw new Error('Unknown action');
   }
 };
 
 export default function App() {
-  const [{ questions, index, status }, dispatch] = useReducer(
+  const [{ questions, index, status, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -75,6 +86,10 @@ export default function App() {
     dispatch({ type: Action.startQuiz, payload: Status.active });
   };
 
+  const handleAnswerClick = (answer) => {
+    dispatch({ type: Action.newAnswer, payload: answer });
+  };
+
   return (
     <div className='app'>
       <Header />
@@ -87,7 +102,9 @@ export default function App() {
             startHandler={handleStartClick}
           />
         )}
-        {status === Status.active && <Question item={questions[index]} />}
+        {status === Status.active && (
+          <Question item={questions[index]} answer={answer} answerHandler={handleAnswerClick} />
+        )}
       </Main>
     </div>
   );
