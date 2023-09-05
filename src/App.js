@@ -25,6 +25,7 @@ const initialState = {
   questions: [],
   index: 0,
   answer: null,
+  score: 0,
   status: Status.loading,
 };
 
@@ -47,9 +48,16 @@ const reducer = (state, action) => {
         status: action.payload,
       };
     case Action.newAnswer:
+      const question = state.questions[state.index];
+      const score =
+        question.correctOption === action.payload
+          ? state.score + question.points
+          : state.score;
+
       return {
         ...state,
         answer: action.payload,
+        score,
       };
     default:
       throw new Error('Unknown action');
@@ -57,7 +65,7 @@ const reducer = (state, action) => {
 };
 
 export default function App() {
-  const [{ questions, index, status, answer }, dispatch] = useReducer(
+  const [{ score, questions, index, status, answer }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -103,7 +111,11 @@ export default function App() {
           />
         )}
         {status === Status.active && (
-          <Question item={questions[index]} answer={answer} answerHandler={handleAnswerClick} />
+          <Question
+            item={questions[index]}
+            answer={answer}
+            answerHandler={handleAnswerClick}
+          />
         )}
       </Main>
     </div>

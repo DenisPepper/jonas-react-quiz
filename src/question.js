@@ -1,7 +1,7 @@
 import { Options } from './options';
 
 export const Question = ({ item, answer, answerHandler }) => {
-  const { question, options, correctOption, points } = item;
+  const { question, options, correctOption } = item;
 
   return (
     <div>
