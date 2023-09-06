@@ -5,6 +5,7 @@ import { Loader } from './Loader';
 import { Error } from './Error';
 import { StartScreen } from './start-screen';
 import { Question } from './question';
+import { NextButton } from './next-button';
 
 const Status = {
   loading: 'loading',
@@ -104,6 +105,10 @@ export default function App() {
     dispatch({ type: Action.newAnswer, payload: answer });
   };
 
+  const handleNextClick = () => {
+    dispatch({ type: Action.nextQuestion });
+  };
+
   return (
     <div className='app'>
       <Header />
@@ -117,11 +122,14 @@ export default function App() {
           />
         )}
         {status === Status.active && (
-          <Question
-            item={questions[index]}
-            answer={answer}
-            answerHandler={handleAnswerClick}
-          />
+          <>
+            <Question
+              item={questions[index]}
+              answer={answer}
+              answerHandler={handleAnswerClick}
+            />
+            <NextButton clickHandler={handleNextClick} />
+          </>
         )}
       </Main>
     </div>
