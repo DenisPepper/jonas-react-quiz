@@ -19,6 +19,7 @@ const Action = {
   dataFaild: 'dataFailed',
   startQuiz: 'startQuiz',
   newAnswer: 'newAnswer',
+  nextQuestion: 'nextQuestion',
 };
 
 const initialState = {
@@ -58,6 +59,11 @@ const reducer = (state, action) => {
         ...state,
         answer: action.payload,
         score,
+      };
+    case Action.nextQuestion:
+      return {
+        ...state,
+        index: state.index + 1,
       };
     default:
       throw new Error('Unknown action');
