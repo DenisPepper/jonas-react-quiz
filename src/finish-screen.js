@@ -1,4 +1,4 @@
-export const FinishScreen = ({ score, totalScore }) => {
+export const FinishScreen = ({ score, totalScore, highscore }) => {
   const percents = Math.ceil((score / totalScore) * 100);
 
   let emoji;
@@ -9,9 +9,12 @@ export const FinishScreen = ({ score, totalScore }) => {
   if (percents < 25) emoji = '😣';
 
   return (
-    <p className='result'>
-      <span>{emoji}</span>
-      You scored <strong>{score}</strong> out of {totalScore} ({percents})%
-    </p>
+    <>
+      <p className='result'>
+        <span>{emoji}</span>
+        You scored <strong>{score}</strong> out of {totalScore} ({percents})%
+      </p>
+      <p className='highscore'>Highscore: {highscore} points</p>
+    </>
   );
 };

@@ -31,6 +31,7 @@ const initialState = {
   index: 0,
   answer: null,
   score: 0,
+  highscore: 0,
   status: Status.loading,
 };
 
@@ -48,10 +49,16 @@ const reducer = (state, action) => {
         status: action.payload.status,
       };
     case Action.startQuiz:
+      return {
+        ...state,
+        status: action.payload,
+      };
     case Action.finishQuiz:
       return {
         ...state,
         status: action.payload,
+        highscore:
+          state.score > state.highscore ? state.score : state.highscore,
       };
     case Action.newAnswer:
       const question = state.questions[state.index];
@@ -77,10 +84,8 @@ const reducer = (state, action) => {
 };
 
 export default function App() {
-  const [{ score, questions, index, status, answer }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ score, questions, index, status, answer, highscore }, dispatch] =
+    useReducer(reducer, initialState);
 
   const totalScore = questions.reduce(
     (acc, question) => acc + question.points,
@@ -157,7 +162,11 @@ export default function App() {
           </>
         )}
         {status === Status.finished && (
-          <FinishScreen score={score} totalScore={totalScore} />
+          <FinishScreen
+            score={score}
+            totalScore={totalScore}
+            highscore={highscore}
+          />
         )}
       </Main>
     </div>
