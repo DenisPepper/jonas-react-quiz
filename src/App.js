@@ -6,6 +6,7 @@ import { Error } from './Error';
 import { StartScreen } from './start-screen';
 import { Question } from './question';
 import { NextButton } from './next-button';
+import { Progress } from './progress';
 
 const Status = {
   loading: 'loading',
@@ -124,6 +125,15 @@ export default function App() {
         )}
         {status === Status.active && (
           <>
+            <Progress
+              current={index + 1}
+              amount={questions.length}
+              score={score}
+              totalScore={questions.reduce(
+                (acc, question) => acc + question.points,
+                0
+              )}
+            />
             <Question
               item={questions[index]}
               answer={answer}
