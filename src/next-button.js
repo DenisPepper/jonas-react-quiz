@@ -1,6 +1,8 @@
 export const NextButton = ({ answer, clickHandler }) => {
+  if (answer === null) return null;
+
   return (
-    <button onClick={clickHandler} disabled={answer === null}>
+    <button className='btn btn-ui' onClick={clickHandler}>
       Next question
     </button>
   );
