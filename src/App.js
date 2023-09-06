@@ -166,6 +166,7 @@ export default function App() {
             score={score}
             totalScore={totalScore}
             highscore={highscore}
+            restartHandler={handleStartClick}
           />
         )}
       </Main>

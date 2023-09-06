@@ -1,4 +1,9 @@
-export const FinishScreen = ({ score, totalScore, highscore }) => {
+export const FinishScreen = ({
+  score,
+  totalScore,
+  highscore,
+  startHandler,
+}) => {
   const percents = Math.ceil((score / totalScore) * 100);
 
   let emoji;
@@ -15,6 +20,9 @@ export const FinishScreen = ({ score, totalScore, highscore }) => {
         You scored <strong>{score}</strong> out of {totalScore} ({percents})%
       </p>
       <p className='highscore'>Highscore: {highscore} points</p>
+      <button className='btn btn-ui' onClick={startHandler}>
+        Restart quiz
+      </button>
     </>
   );
 };
