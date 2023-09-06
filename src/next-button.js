@@ -1,3 +1,7 @@
-export const NextButton = ({ clickHandler }) => {
-  return <button onClick={clickHandler}> Next question</button>;
+export const NextButton = ({ answer, clickHandler }) => {
+  return (
+    <button onClick={clickHandler} disabled={answer === null}>
+      Next question
+    </button>
+  );
 };

@@ -65,6 +65,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         index: state.index + 1,
+        answer: null,
       };
     default:
       throw new Error('Unknown action');
@@ -128,7 +129,7 @@ export default function App() {
               answer={answer}
               answerHandler={handleAnswerClick}
             />
-            <NextButton clickHandler={handleNextClick} />
+            <NextButton answer={answer} clickHandler={handleNextClick} />
           </>
         )}
       </Main>
