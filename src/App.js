@@ -51,6 +51,9 @@ const reducer = (state, action) => {
     case Action.startQuiz:
       return {
         ...state,
+        index: 0,
+        answer: null,
+        score: 0,
         status: action.payload,
       };
     case Action.finishQuiz:
@@ -166,7 +169,7 @@ export default function App() {
             score={score}
             totalScore={totalScore}
             highscore={highscore}
-            restartHandler={handleStartClick}
+            startHandler={handleStartClick}
           />
         )}
       </Main>
