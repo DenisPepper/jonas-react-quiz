@@ -2,7 +2,7 @@ export const FinishScreen = ({ score, totalScore }) => {
   return (
     <p className='result'>
       You scored <strong>{score}</strong> out of {totalScore} (
-      {Math.ceil(score / totalScore)})%
+      {Math.ceil(score / totalScore*100)})%
     </p>
   );
 };

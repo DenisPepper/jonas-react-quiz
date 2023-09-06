@@ -87,6 +87,8 @@ export default function App() {
     0
   );
 
+  const isLastQuestion = index === questions.length - 1;
+
   useEffect(() => {
     fetch('http://localhost:8000/questions')
       .then((response) => {
@@ -116,7 +118,7 @@ export default function App() {
   };
 
   const handleNextClick = () => {
-    index < questions.length - 1
+    !isLastQuestion
       ? dispatch({ type: Action.nextQuestion })
       : dispatch({ type: Action.finishQuiz, payload: Status.finished });
   };
@@ -147,7 +149,11 @@ export default function App() {
               answer={answer}
               answerHandler={handleAnswerClick}
             />
-            <NextButton answer={answer} clickHandler={handleNextClick} />
+            <NextButton
+              answer={answer}
+              clickHandler={handleNextClick}
+              isLastQuestion={isLastQuestion}
+            />
           </>
         )}
         {status === Status.finished && (
