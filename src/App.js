@@ -126,7 +126,8 @@ export default function App() {
         {status === Status.active && (
           <>
             <Progress
-              current={index + 1}
+              answer={answer}
+              index={index}
               amount={questions.length}
               score={score}
               totalScore={questions.reduce(
