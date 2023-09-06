@@ -7,6 +7,7 @@ import { StartScreen } from './start-screen';
 import { Question } from './question';
 import { NextButton } from './next-button';
 import { Progress } from './progress';
+import { FinishScreen } from './finish-screen';
 
 const Status = {
   loading: 'loading',
@@ -22,6 +23,7 @@ const Action = {
   startQuiz: 'startQuiz',
   newAnswer: 'newAnswer',
   nextQuestion: 'nextQuestion',
+  finishQuiz: 'finishQuiz',
 };
 
 const initialState = {
@@ -46,6 +48,7 @@ const reducer = (state, action) => {
         status: action.payload.status,
       };
     case Action.startQuiz:
+    case Action.finishQuiz:
       return {
         ...state,
         status: action.payload,
@@ -79,6 +82,11 @@ export default function App() {
     initialState
   );
 
+  const totalScore = questions.reduce(
+    (acc, question) => acc + question.points,
+    0
+  );
+
   useEffect(() => {
     fetch('http://localhost:8000/questions')
       .then((response) => {
@@ -108,7 +116,9 @@ export default function App() {
   };
 
   const handleNextClick = () => {
-    dispatch({ type: Action.nextQuestion });
+    index < questions.length - 1
+      ? dispatch({ type: Action.nextQuestion })
+      : dispatch({ type: Action.finishQuiz, payload: Status.finished });
   };
 
   return (
@@ -130,10 +140,7 @@ export default function App() {
               index={index}
               amount={questions.length}
               score={score}
-              totalScore={questions.reduce(
-                (acc, question) => acc + question.points,
-                0
-              )}
+              totalScore={totalScore}
             />
             <Question
               item={questions[index]}
@@ -142,6 +149,9 @@ export default function App() {
             />
             <NextButton answer={answer} clickHandler={handleNextClick} />
           </>
+        )}
+        {status === Status.finished && (
+          <FinishScreen score={score} totalScore={totalScore} />
         )}
       </Main>
     </div>
