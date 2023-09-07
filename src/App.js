@@ -38,7 +38,7 @@ const initialState = {
   score: 0,
   highscore: 0,
   status: Status.loading,
-  timeRemaining: TIME_INTERVAL,
+  timeRemaining: null,
 };
 
 const reducer = (state, action) => {
@@ -60,6 +60,7 @@ const reducer = (state, action) => {
         questions: state.questions,
         highscore: state.highscore,
         status: action.payload,
+        timeRemaining: TIME_INTERVAL * state.questions.length,
       };
     case Action.finishQuiz:
       return {
