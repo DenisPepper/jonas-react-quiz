@@ -8,6 +8,8 @@ import { Question } from './question';
 import { NextButton } from './next-button';
 import { Progress } from './progress';
 import { FinishScreen } from './finish-screen';
+import { Timer } from './timer';
+import { Footer } from './footer';
 
 const Status = {
   loading: 'loading',
@@ -24,6 +26,7 @@ const Action = {
   newAnswer: 'newAnswer',
   nextQuestion: 'nextQuestion',
   finishQuiz: 'finishQuiz',
+  tick: 'tick',
 };
 
 const initialState = {
@@ -33,6 +36,7 @@ const initialState = {
   score: 0,
   highscore: 0,
   status: Status.loading,
+  timeRemaining: 10,
 };
 
 const reducer = (state, action) => {
@@ -81,14 +85,21 @@ const reducer = (state, action) => {
         index: state.index + 1,
         answer: null,
       };
+    case Action.tick:
+      return {
+        ...state,
+        timeRemaining: state.timeRemaining - 1,
+      };
     default:
       throw new Error('Unknown action');
   }
 };
 
 export default function App() {
-  const [{ score, questions, index, status, answer, highscore }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { score, questions, index, status, answer, highscore, timeRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const totalScore = questions.reduce(
     (acc, question) => acc + question.points,
@@ -131,6 +142,10 @@ export default function App() {
       : dispatch({ type: Action.finishQuiz, payload: Status.finished });
   };
 
+  const handleTick = () => {
+    dispatch({ type: Action.tick });
+  };
+
   return (
     <div className='app'>
       <Header />
@@ -157,11 +172,14 @@ export default function App() {
               answer={answer}
               answerHandler={handleAnswerClick}
             />
-            <NextButton
-              answer={answer}
-              clickHandler={handleNextClick}
-              isLastQuestion={isLastQuestion}
-            />
+            <Footer>
+              <NextButton
+                answer={answer}
+                clickHandler={handleNextClick}
+                isLastQuestion={isLastQuestion}
+              />
+              <Timer tickHandler={handleTick} timeRemaining={timeRemaining} />
+            </Footer>
           </>
         )}
         {status === Status.finished && (
