@@ -10,6 +10,7 @@ import { Progress } from './progress';
 import { FinishScreen } from './finish-screen';
 import { Timer } from './timer';
 import { Footer } from './footer';
+import { questions as data } from './data';
 
 const TIME_INTERVAL = 10;
 
@@ -112,7 +113,11 @@ export default function App() {
   const isLastQuestion = index === questions.length - 1;
 
   useEffect(() => {
-    fetch('http://localhost:8000/questions')
+    dispatch({
+      type: Action.dataRecived,
+      payload: { questions: data, status: Status.ready },
+    });
+    /*fetch('http://localhost:8000/questions')
       .then((response) => {
         if (response.ok) return response.json();
         throw new Error('Server response are not ok');
@@ -128,7 +133,7 @@ export default function App() {
           type: Action.dataFaild,
           payload: { questions: [], status: Status.error },
         })
-      );
+      );*/
   }, []);
 
   const handleStartClick = () => {
