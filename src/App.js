@@ -11,6 +11,8 @@ import { FinishScreen } from './finish-screen';
 import { Timer } from './timer';
 import { Footer } from './footer';
 
+const TIME_INTERVAL = 10;
+
 const Status = {
   loading: 'loading',
   error: 'error',
@@ -36,7 +38,7 @@ const initialState = {
   score: 0,
   highscore: 0,
   status: Status.loading,
-  timeRemaining: 10,
+  timeRemaining: TIME_INTERVAL,
 };
 
 const reducer = (state, action) => {
@@ -54,10 +56,9 @@ const reducer = (state, action) => {
       };
     case Action.startQuiz:
       return {
-        ...state,
-        index: 0,
-        answer: null,
-        score: 0,
+        ...initialState,
+        questions: state.questions,
+        highscore: state.highscore,
         status: action.payload,
       };
     case Action.finishQuiz:
