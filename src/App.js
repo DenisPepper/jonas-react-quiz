@@ -89,6 +89,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         timeRemaining: state.timeRemaining - 1,
+        status: state.timeRemaining === 0 ? Status.finished : state.status,
       };
     default:
       throw new Error('Unknown action');
